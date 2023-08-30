@@ -40,8 +40,8 @@ export default {
           const response = await axios.get(
             `http://localhost:4000/topnews?page=${i}`
           );
-          const documant = parser.parseFromString(response.data, "text/html");
-          const rows = documant
+          const document = parser.parseFromString(response.data, "text/html");
+          const rows = document
             .querySelectorAll("table")[2]
             .querySelectorAll("tr");
           this.allArticles.push(...Array.from(rows));
