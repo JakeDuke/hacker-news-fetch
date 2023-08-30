@@ -1,24 +1,21 @@
 # test-app
 
 ## Project setup
+
 ```
 npm install
 ```
 
 ### Compiles and hot-reloads for development
+
 ```
 npm run serve
 ```
 
-### Compiles and minifies for production
-```
-npm run build
-```
+### Guide
 
-### Lints and fixes files
 ```
-npm run lint
+run serve (api)
+run app
+fetch articles
 ```
-
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).

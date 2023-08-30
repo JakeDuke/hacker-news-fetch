@@ -1,23 +1,96 @@
 <template>
-  <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
+  <div id="test-app">
+    <img alt="Vue logo" src="./assets/logo.png" />
+    <div class="main">
+      <button @click="get">Load articles</button>
+      <div v-if="loading">Loading...</div>
+      <table v-else>
+        <tbody>
+          <tr v-for="(article, index) in articlesToShow" :key="index">
+            <div v-html="article.innerHTML" class="content"></div>
+          </tr>
+        </tbody>
+      </table>
+    </div>
   </div>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
+import axios from "axios";
+const parser = new DOMParser();
 
 export default {
-  name: 'App',
-  components: {
-    HelloWorld
+  name: "App",
+  data() {
+    return {
+      allArticles: [],
+      loading: false
+    };
+  },
+  computed: {
+    articlesToShow() {
+      return this.allArticles.slice(0, 306);
+    }
+  },
+  methods: {
+    async get() {
+      this.loading = true;
+      try {
+        for (let i = 1; i < 5; i++) {
+          const response = await axios.get(
+            `http://localhost:4000/topnews?page=${i}`
+          );
+          const documant = parser.parseFromString(response.data, "text/html");
+          const rows = documant
+            .querySelectorAll("table")[2]
+            .querySelectorAll("tr");
+          this.allArticles.push(...Array.from(rows));
+        }
+      } catch (error) {
+        console.log(error);
+      } finally {
+        this.loading = false;
+      }
+    }
   }
-}
+};
 </script>
 
 <style>
-#app {
+.content {
+  display: flex;
+}
+
+table {
+  margin: auto;
+}
+
+.morelink {
+  display: none;
+}
+
+.subline {
+  color: transparent;
+}
+
+.subline > * {
+  display: none;
+}
+
+.age {
+  display: inline-flex;
+}
+
+.age::before {
+  content: "Date: ";
+  color: black;
+}
+
+a {
+  color: #105d3a;
+}
+
+#test-app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
